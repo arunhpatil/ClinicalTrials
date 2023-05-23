@@ -2,11 +2,7 @@ import xml.etree.ElementTree as ET
 import os 
 import sys
 
-#mytree = ET.ElementTree(file='NCT0521xxxx/NCT05217459.xml')
-#mytree = ET.parse('NCT0521xxxx/NCT05217459.xml')
 mytree = ET.parse('workingDir/NCT04551807.xml')
-#mytree = ET.parse('workingDir/NCT05611229.xml')
-#mytree = ET.parse('workingDir/NCT03387189.xml')
 myroot = mytree.getroot()
 required_variables = ["nct_id","agency","agency_class","last_name","role","affiliation","phone","email","name","city","state","country","zip","study_first_posted"]
 outlist = list()
@@ -55,14 +51,6 @@ def walk_tree_recursive(root):
                     except KeyError:
                         broad_vals[(NCTID, '3', instname, 'address')] = [str(child.text)]
 
-                #required_variables = ["nct_id","agency","agency_class","last_name","role","affiliation","phone","email","name","city","state","country","zip","study_first_posted"]
-                # list of dictionaries
-                #try:
-                #    temp[child.tag].append(child.text)
-                #except KeyError:
-                #    temp[child.tag] = [child.text]
-                #print("-->"+ child.tag)
-                #print(child.text)
 
 
 walk_tree_recursive(myroot)
@@ -71,14 +59,11 @@ xadd = open("contact_address.txt", "w+")
 xagency = open("role_affiliations_details.txt", "w+")
 xclass = open("nct_agency_details.txt", "w+")
 for x, y in broad_vals.items():
-    #xkeys = x.split(',')
     if x[1] == '2':
         yjoined = "\t".join(y)
         xemail.write(x[0]+"\t"+x[1] + "\t"+ x[2]+ "\t" + x[3] +"\t"+yjoined+"\n")
     elif x[1] == '3':
-        #yjoined = y
         yjoined = "\t".join(y)
-        #print(y)
         xadd.write(x[0]+"\t"+x[1] + "\t"+ x[2]+ "\t" + x[3] +"\t"+yjoined+"\n")
     elif x[1] == '1':
         yjoined = "\t".join(y)
@@ -86,12 +71,12 @@ for x, y in broad_vals.items():
     elif x[1] == '0':
         yjoined = y
         xclass.write(x[0]+"\t"+x[1] + "\t"+ x[2]+ "\t-\t" + "\t"+yjoined+"\n")
-        #print(x,y, yjoined)
 
-    #print(x[0],x[1],x[2], y)
 
 
 '''
+# SAMPLE OUTPUT 
+
 nct_id ['NCT04551807']
 agency ['JHSPH Center for Clinical Trials']
 agency_class ['Other']
@@ -109,21 +94,6 @@ study_first_posted ['September 16, 2020']
 '''
 
 
-
-
-'''
-for x in myroot:
-    print(x.tag, x.attrib)
-nct_id = myroot.find('id_info').text
-price = myroot.find('brief_title').text
-print(nct_id, price)
-
-for x in myroot.findall('clinical_study'):
-    nct_id =x.find('nct_id').text
-    price = x.find('brief_title').text
-    print(nct_id, price)
-'''
-
 indent = 0
 ignoreElems = ['displayNameKey', 'displayName']
 
@@ -138,48 +108,3 @@ def printRecur(root):
     for elem in root.getchildren():
         printRecur(elem)
     indent -= 4
-        
-        
-#root = tree.getroot()
-#printRecur(myroot)
-
-#for x in myroot:
-#    print(x.text)
-'''
-basepath = os.getcwd()
-#entries = os.listdir(cwd)
-#print(entries[0:5])
-for entry in os.listdir(basepath):
-    if not 'workingDir' in entry:
-        if os.path.isdir(os.path.join(basepath, entry)):
-            newEntry = os.listdir(os.path.join(basepath, entry))
-            destination = os.path.join(basepath, 'workingDir')
-            #print(destination)
-            for eachentry in newEntry:
-                filename = os.path.join(basepath, entry, eachentry)
-                #print(filename)
-                mytree = ET.parse(filename)
-                myroot = mytree.getroot()
-                datereq = myroot.find('study_first_posted').text.split(" ")[2]
-                #print(datereq)
-                if datereq >= '2018':
-                    comm = "cp " + str(filename) + " " + str(destination)
-                    os.system(comm)
-                    #print("Arun")
-                    #print(datereq)
-            #print(entry)
-    else:
-        pass
-#print(myroot.find('study_first_posted').text.split(" ")[2])
-'''
-
-'''
-for x in myroot.findall('food'):
-    item =x.find('item').text
-    price = x.find('price').text
-    print(item, price)
-for x in myroot:
-    print(x.tag, x.attrib)
-
-# <study_first_posted type="Estimate">November 9, 2022</study_first_posted>
-'''

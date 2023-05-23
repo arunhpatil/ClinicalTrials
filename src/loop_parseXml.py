@@ -2,10 +2,6 @@ import xml.etree.ElementTree as ET
 import os 
 import sys
 
-#mytree = ET.ElementTree(file='NCT0521xxxx/NCT05217459.xml')
-#mytree = ET.parse('NCT0521xxxx/NCT05217459.xml')
-#mytree = ET.parse('workingDir/NCT05611229.xml')
-#mytree = ET.parse('workingDir/NCT03387189.xml')
 required_variables = ["nct_id","agency","agency_class","last_name","role","affiliation","phone","email","name","city","state","country","zip","study_first_posted"]
 outlist = list()
 temp = dict()
@@ -62,8 +58,6 @@ count=0
 for entry in os.listdir(basepath):
     if ".xml" in entry:
         count+=1
-        #print(entry)
-        #mytree = ET.parse('workingDir/NCT04551807.xml')
         mytree = ET.parse(entry)
         myroot = mytree.getroot()
         lname = ""
@@ -80,14 +74,11 @@ xagency = open("role_affiliations_details.txt", "a+")
 xclass = open("nct_agency_details.txt", "a+")
 
 for x, y in broad_vals.items():
-    #xkeys = x.split(',')
     if x[1] == '2':
         yjoined = "\t".join(y)
         xemail.write(x[0]+"\t"+x[1] + "\t"+ x[2]+ "\t" + x[3] +"\t"+yjoined+"\n")
     elif x[1] == '3':
-        #yjoined = y
         yjoined = "\t".join(y)
-        #print(y)
         xadd.write(x[0]+"\t"+x[1] + "\t"+ x[2]+ "\t" + x[3] +"\t"+yjoined+"\n")
     elif x[1] == '1':
         yjoined = "\t".join(y)
